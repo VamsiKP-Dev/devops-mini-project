@@ -1,0 +1,55 @@
+
+stages:
+- build
+- test
+- push
+- deploy
+
+
+variables:
+  IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+
+
+before_script:
+  - echo "Using Docker in Docker"
+
+
+build:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  script:
+    - docker build -t $IMAGE .
+  artifacts:
+    expire_in: 1h
+    paths:
+      - .
+
+
+unit_tests:
+  stage: test
+  image: $IMAGE
+  script:
+    - python -m pytest -q
+
+
+push:
+  stage: push
+  image: docker:24
+  services:
+    - docker:24-dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - docker push $IMAGE
+  only:
+    - main
+
+
+deploy:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f k8s/
+  only:
+    - main

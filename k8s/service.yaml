@@ -1,0 +1,13 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-mini-svc
+spec:
+  type: NodePort # For Minikube or change to LoadBalancer for cloud
+  selector:
+    app: devops-mini
+ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30080
