@@ -3,14 +3,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USERNAME = 'vamsikpdevops'  // Your Docker Hub username
-        IMAGE_NAME = 'devops-mini'
-        IMAGE_TAG = 'latest'  // Can be 'latest', '1.0', etc.
+        IMAGE_NAME = "vamsikpdevops/devops-mini:latest"
     }
 
     stages {
-
-        stage('Checkout') {
+        stage('Checkout SCM') {
             steps {
                 checkout scm
             }
@@ -19,8 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image with correct tag
-                    docker.build("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}")
+                    bat "docker build -t %IMAGE_NAME% ."
                 }
             }
         }
@@ -28,9 +24,9 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Use your actual Jenkins credentials ID here
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        docker.image("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                        bat "docker push %IMAGE_NAME%"
                     }
                 }
             }
@@ -39,8 +35,7 @@ pipeline {
         stage('Clean Up Local Images') {
             steps {
                 script {
-                    // Remove dangling images to save space
-                    sh 'docker system prune -f'
+                    bat "docker rmi %IMAGE_NAME% || echo Image not found, skipping cleanup"
                 }
             }
         }
