@@ -1,45 +1,6 @@
 
 ---
 
-## ✅ Folder structure review
-
-Your repository shows the following top-level items:
-
-* `app/`
-* `k8s/`
-* `tests/`
-* `.gitignore`
-* `GitLab-CI.yml`
-* `Dockerfile`
-* `Jenkinsfile`
-* `LICENSE`
-* `README.md`
-* `docker-compose.yml`
-* `requirements.txt`
-
-So yes, the folder structure **is correct**, but there are some **extra files/folders** that are not referenced in your README (for example `docker-compose.yml`, `.gitlab-ci.yml`, `k8s/` might not be fully described).
-That means your README needs slight updates to match exactly what exists.
-
----
-
-## ⚠ Areas in README to adjust
-
-1. The README’s “Project Structure” section only lists root items plus `app/` and `tests/`. It omits `k8s/`, `.gitignore`, `docker-compose.yml`, `.gitlab-ci.yml`.
-2. The README lists the file `test_calc.py` inside `tests/`, but your repo shows perhaps `test_app.py` (or similar) — you should verify filename.
-3. The README says “Docker build command: `docker build -t devops-mini .`” but your image tag uses your DockerHub username (`vamsikpdevops/devops-mini`) — update for clarity.
-4. README lists the Jenkins credentials ID as `docker-hub-credentials1.1` but your pipeline uses `dockerhub-creds` or similar — this mismatch should be corrected.
-5. The “Kubernetes Deployment Manifest” section should reflect the actual folder `k8s/` in your repo.
-6. Add mention of `docker-compose.yml` (since file exists) describing how to run locally with Docker Compose.
-7. Add mention of `.gitlab-ci.yml` or remove if it’s unused.
-8. The README currently says “MIT License – feel free to use and extend.” This is fine, but you may want to link to the `LICENSE` file.
-
----
-
-## 📄 Updated README.md
-
-Here’s your updated README.md with fixes to reflect the actual folder structure and content.
-**You can copy–paste this into your repo (replacing the existing README).**
-
 ````markdown
 # 🧮 DevOps Mini Project – Flask Calculator API
 
@@ -227,3 +188,4 @@ Feel free to use, modify, and extend.
 
 ````
 ---
+
