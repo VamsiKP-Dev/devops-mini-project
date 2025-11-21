@@ -1,185 +1,259 @@
+---
+
+# ✅ **FINAL README.md (Copy–Paste Directly)**
+
+```markdown
+# 🧮 DevOps Mini Project – Flask Calculator API
+
+<p align="center">
+
+  <!-- Build Status (Jenkins badge static, because local Jenkins is not public) -->
+  <img src="https://img.shields.io/badge/Jenkins-Build%20Passing-brightgreen?style=for-the-badge&logo=jenkins" />
+
+  <!-- Docker Pulls -->
+  <a href="https://hub.docker.com/r/vamsikpdevops/devops-mini">
+    <img src="https://img.shields.io/docker/pulls/vamsikpdevops/devops-mini?style=for-the-badge&logo=docker" />
+  </a>
+
+  <!-- Docker Image Size -->
+  <img src="https://img.shields.io/docker/image-size/vamsikpdevops/devops-mini/latest?style=for-the-badge&logo=docker" />
+
+  <!-- GitHub Stars -->
+  <a href="https://github.com/VamsiKP-Dev/devops-mini-project/stargazers">
+    <img src="https://img.shields.io/github/stars/VamsiKP-Dev/devops-mini-project?style=for-the-badge" />
+  </a>
+
+  <!-- GitHub Forks -->
+  <a href="https://github.com/VamsiKP-Dev/devops-mini-project/forks">
+    <img src="https://img.shields.io/github/forks/VamsiKP-Dev/devops-mini-project?style=for-the-badge" />
+  </a>
+
+  <!-- GitHub Issues -->
+  <a href="https://github.com/VamsiKP-Dev/devops-mini-project/issues">
+    <img src="https://img.shields.io/github/issues/VamsiKP-Dev/devops-mini-project?style=for-the-badge" />
+  </a>
+
+  <!-- Last Commit -->
+  <img src="https://img.shields.io/github/last-commit/VamsiKP-Dev/devops-mini-project?style=for-the-badge&logo=git" />
+
+  <!-- Python -->
+  <img src="https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python" />
+
+  <!-- Flask -->
+  <img src="https://img.shields.io/badge/Flask-API-black?style=for-the-badge&logo=flask" />
+
+  <!-- Kubernetes -->
+  <img src="https://img.shields.io/badge/Kubernetes-Ready-blue?style=for-the-badge&logo=kubernetes" />
+
+  <!-- License -->
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
+
+</p>
 
 ---
 
-# 📘 DevOps Mini Project — Flask Calculator App (CI/CD using Jenkins, Docker & Kubernetes)
+## 📘 Project Overview
 
-This project is a complete **CI/CD pipeline** setup for a simple **Flask-based Calculator API**, using:
+This project is a **Dockerized Flask Calculator API** with:
 
-* **Python + Flask**
-* **Docker**
-* **PyTest**
-* **Jenkins (Declarative Pipeline)**
-* **DockerHub**
-* **Kubernetes (kubectl deployment)**
+✅ Automatic CI/CD pipeline using **Jenkins**  
+✅ Docker image build + push to **DockerHub**  
+✅ Automated testing with **pytest**  
+✅ Deployment to **Kubernetes** (kubectl apply)  
+✅ REST API for arithmetic operations  
 
-The pipeline automates:
-
-✔ Building Docker Image
-✔ Running Unit Tests
-✔ Pushing Image to DockerHub
-✔ Deploying to Kubernetes
+This project demonstrates **end-to-end DevOps workflow**.
 
 ---
 
-## 🚀 Project Architecture
+## 🏗️ Project Structure
 
 ```
-+----------------+      +--------------------+      +-------------------+
-|   GitHub Repo  | ---> |   Jenkins Pipeline | ---> |   DockerHub        |
-+----------------+      +--------------------+      +-------------------+
-                                   |
-                                   v
-                           +----------------+
-                           |   Kubernetes   |
-                           +----------------+
-```
 
----
-
-## 🗂 Project Structure
-
-```
 devops-mini-project/
-│
-├── app/
+│── app/
 │   ├── app.py
 │   ├── calculator.py
-│   └── __init__.py
-│
-├── tests/
-│   └── test_calc.py
-│
-├── Dockerfile
-├── requirements.txt
-├── Jenkinsfile
+│── tests/
+│   ├── test_app.py
+│── Dockerfile
+│── requirements.txt
+│── Jenkinsfile
+│── k8s/
+│   ├── deployment.yaml
+│   ├── service.yaml
 └── README.md
+
 ```
 
 ---
 
-## 🔧 Technologies Used
+## 🚀 Features
 
-| Tool / Tech    | Purpose             |
-| -------------- | ------------------- |
-| **Flask**      | Calculator REST API |
-| **Docker**     | Containerize API    |
-| **PyTest**     | Unit testing        |
-| **Jenkins**    | CI/CD automation    |
-| **DockerHub**  | Image registry      |
-| **Kubernetes** | Deployment          |
+- REST API built using Flask  
+- Supports operations: **add, sub, mul, div**  
+- Dockerized for consistent deployment  
+- Automated CI/CD pipeline  
+- Unit-Tested  
+- Kubernetes Deployment Ready  
 
 ---
 
-## 🧮 API Endpoints
+## 🔧 API Endpoints
 
-### **Health Check**
+| Method | Endpoint | Description |
+|-------|----------|-------------|
+| GET | `/` | Health message |
+| GET | `/health` | Service health check |
+| GET | `/calc?op=add&a=10&b=20` | Perform calculation |
+
+### Example usage:
 
 ```
-GET /health
-```
 
-### **Calculator Operation**
+[http://localhost:5000/calc?op=add&a=10&b=5](http://localhost:5000/calc?op=add&a=10&b=5)
 
-```
-GET /calc?op=add&a=10&b=20
-```
+````
 
-Supported operations:
+Response:
 
-| Operation | Example             |
-| --------- | ------------------- |
-| add       | `?op=add&a=5&b=3`   |
-| sub       | `?op=sub&a=10&b=4`  |
-| mul       | `?op=mul&a=10&b=20` |
-| div       | `?op=div&a=20&b=5`  |
+```json
+{
+  "Result": 15
+}
+````
 
 ---
 
-## 🐳 Docker Commands
+## 🐳 Docker Instructions
 
-### **Build Image**
+### **Build image**
 
-```
+```sh
 docker build -t devops-mini .
 ```
 
-### **Run Container**
+### **Run container**
 
-```
+```sh
 docker run -p 5000:5000 devops-mini
 ```
 
+### DockerHub Image
+
+👉 [https://hub.docker.com/r/vamsikpdevops/devops-mini](https://hub.docker.com/r/vamsikpdevops/devops-mini)
+
 ---
 
-## 🧪 Run Tests Locally
+## 🧪 Run Tests
 
-```
+```sh
 pytest -q
 ```
 
 ---
 
-## 📦 Jenkins Declarative Pipeline
+## ⚙️ Jenkins CI/CD Pipeline
 
-The pipeline performs:
+Your pipeline includes:
 
-1️⃣ Checkout code from GitHub
-2️⃣ Build Docker image
-3️⃣ Run PyTest inside container
-4️⃣ Push image to DockerHub
-5️⃣ Deploy to Kubernetes
+* **Checkout code**
+* **Build Docker image**
+* **Run tests**
+* **Push image to DockerHub**
+* **Deploy to Kubernetes**
 
----
+### Jenkinsfile used:
 
-## 🛠 Jenkins Credentials Required
+```groovy
+pipeline {
+  agent any
 
-| ID                          | Type             | Purpose            |
-| --------------------------- | ---------------- | ------------------ |
-| `docker-hub-credentials1.1` | Username + Token | Push Docker images |
-| `github-pat`                | GitHub PAT       | Repo access        |
+  environment {
+    IMAGE = "${env.DOCKER_HUB_USER}/devops-mini:${env.BUILD_NUMBER}"
+  }
 
----
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
 
-## 🌐 Kubernetes Commands
+    stage('Build Image') {
+      steps {
+        sh 'docker build -t $IMAGE .'
+      }
+    }
 
-### Apply Deployment:
+    stage('Run Tests') {
+      steps {
+        sh 'docker run --rm $IMAGE python -m pytest -q'
+      }
+    }
 
+    stage('Push Image') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials1.1', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+          sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+          sh 'docker push $IMAGE'
+        }
+      }
+    }
+
+    stage('Deploy to K8s') {
+      steps {
+        sh 'kubectl set image deployment/devops-mini devops-mini=$IMAGE --record || true'
+        sh 'kubectl apply -f k8s/'
+      }
+    }
+  }
+
+  post {
+    always {
+      cleanWs()
+    }
+  }
+}
 ```
+
+---
+
+## ☸️ Kubernetes Deployment
+
+Apply all manifests:
+
+```sh
 kubectl apply -f k8s/
 ```
 
-### Update Image:
+Check pod:
 
+```sh
+kubectl get pods
 ```
-kubectl set image deployment/devops-mini devops-mini=<image>
+
+Access service:
+
+```sh
+kubectl get svc
 ```
-
----
-
-## 📝 Dockerfile (Summary)
-
-* Uses Python 3.11 slim image
-* Installs requirements
-* Copies app + tests
-* Exposes port 5000
-* Runs Flask app
-
----
-
-## 📄 Jenkinsfile (Summary)
-
-* Builds docker image
-* Runs PyTest
-* Pushes to DockerHub
-* Deploys to Kubernetes
 
 ---
 
 ## 👨‍💻 Author
 
-**Vamsi Krishna (DevOps Engineer)**
-GitHub: *VamsiKP-Dev*
+**Vamsi Krishna**
+DevOps Engineer | Cloud | Automation | CI/CD
+
+GitHub: [https://github.com/VamsiKP-Dev](https://github.com/VamsiKP-Dev)
 
 ---
 
-If you want, I can also generate a **diagram**, **badges**, or **screenshots section** for your README.
+## 📄 License
+
+MIT License – feel free to use and extend.
+
+---
+
+# 🎉 Done!
