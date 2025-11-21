@@ -3,54 +3,52 @@ pipeline {
     agent any
 
     environment {
-        IMAGE = "${env.DOCKER_HUB_USER}/devops-mini:${env.BUILD_NUMBER}"
+        DOCKER_HUB_USERNAME = 'vamsikpdevops'  // Your Docker Hub username
+        IMAGE_NAME = 'devops-mini'
+        IMAGE_TAG = 'latest'  // Can also use a version number
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE .'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                sh 'docker run --rm $IMAGE python -m pytest -q'
-            }
-        }
-
-        stage('Push Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_HUB_USER',
-                    passwordVariable: 'DOCKER_HUB_PASS'
-                )]) {
-                    sh 'echo $DOCKER_HUB_PASS | docker login -u $DOCKER_HUB_USER --password-stdin'
-                    sh 'docker push $IMAGE'
+                script {
+                    // Build Docker image
+                    docker.build("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}")
                 }
             }
         }
 
-        stage('Deploy to K8s') {
+        stage('Push Docker Image') {
             steps {
-                // Deploy using Kubernetes
-                sh 'kubectl set image deployment/devops-mini devops-mini=$IMAGE --record || true'
-                sh 'kubectl apply -f k8s/'
+                script {
+                    // Use the correct Jenkins credentials ID for Docker Hub
+                    docker.withRegistry('https://index.docker.io/v1/', 'flask-calc-ci-cd') {
+                        docker.image("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }
+
+        stage('Clean Up Local Images') {
+            steps {
+                script {
+                    // Remove unused Docker images to free space
+                    sh 'docker system prune -f'
+                }
             }
         }
     }
 
     post {
         always {
-            cleanWs()
+            echo 'Pipeline finished!'
         }
     }
 }
-
