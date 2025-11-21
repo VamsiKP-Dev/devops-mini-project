@@ -5,7 +5,7 @@ pipeline {
     environment {
         DOCKER_HUB_USERNAME = 'vamsikpdevops'  // Your Docker Hub username
         IMAGE_NAME = 'devops-mini'
-        IMAGE_TAG = 'latest'  // Can also use a version number
+        IMAGE_TAG = 'latest'  // Can be 'latest', '1.0', etc.
     }
 
     stages {
@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
+                    // Build Docker image with correct tag
                     docker.build("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}")
                 }
             }
@@ -28,8 +28,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Use the correct Jenkins credentials ID for Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', 'flask-calc-ci-cd') {
+                    // Use your actual Jenkins credentials ID here
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
                         docker.image("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
                     }
                 }
@@ -39,7 +39,7 @@ pipeline {
         stage('Clean Up Local Images') {
             steps {
                 script {
-                    // Remove unused Docker images to free space
+                    // Remove dangling images to save space
                     sh 'docker system prune -f'
                 }
             }
